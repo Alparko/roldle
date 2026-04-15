@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>roldle</title>
+  <meta name="description" content="Adivina el personaje oculto de tus partidas de rol cada dia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=MedievalSharp&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero__sigil hero__sigil--left" aria-hidden="true"></div>
+      <div class="hero__sigil hero__sigil--right" aria-hidden="true"></div>
+      <p class="hero__eyebrow">Reto diario de personajes</p>
+      <h1>roldle</h1>
+      <p class="hero__copy">
+        Descubre al personaje secreto comparando su raza, clase, sexo, jugador y partida.
+      </p>
+      <div class="ornament" aria-hidden="true">
+        <span></span>
+      </div>
+      <div class="hero__meta">
+        <div class="meta-card">
+          <span class="meta-card__label">Objetivo</span>
+          <strong id="challenge-date">Cargando...</strong>
+        </div>
+        <div class="meta-card">
+          <span class="meta-card__label">Intentos</span>
+          <strong id="attempt-counter">0</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="board">
+      <section class="panel panel--input">
+        <div class="panel__head">
+          <div>
+            <p class="panel__eyebrow">Buscar personaje</p>
+            <h2>Prueba tu siguiente sospechoso</h2>
+          </div>
+          <div class="controls">
+            <button id="next-day-button" class="button button--secondary" type="button">Pasar al siguiente</button>
+            <button id="reset-button" class="button" type="button">Reiniciar partida</button>
+          </div>
+        </div>
+
+        <form id="guess-form" class="guess-form" autocomplete="off">
+          <label class="visually-hidden" for="guess-input">Nombre del personaje</label>
+          <div class="guess-form__input-wrap">
+            <input id="guess-input" name="guess" type="text" placeholder="Empieza a escribir un nombre..." list="character-suggestions">
+            <datalist id="character-suggestions"></datalist>
+          </div>
+          <button class="button button--accent" type="submit">Probar</button>
+        </form>
+
+        <p id="helper-text" class="helper-text">
+          Cargando base de datos de personajes...
+        </p>
+      </section>
+
+      <section class="panel panel--status">
+        <div class="panel__head">
+          <div>
+            <p class="panel__eyebrow">Estado</p>
+            <h2>Tu partida de hoy</h2>
+          </div>
+        </div>
+        <div id="status-card" class="status-card status-card--neutral">
+          <p id="status-title">Preparando el desafio...</p>
+          <p id="status-copy">Cuando el CSV se cargue podras empezar a adivinar.</p>
+        </div>
+      </section>
+
+      <section class="panel panel--history">
+        <div class="panel__head">
+          <div>
+            <p class="panel__eyebrow">Intentos</p>
+            <h2>Historial de comparaciones</h2>
+          </div>
+        </div>
+
+        <div class="results-table" role="region" aria-live="polite">
+          <div class="results-table__header">
+            <span>Nombre</span>
+            <span>Raza</span>
+            <span>Clase</span>
+            <span>Sexo</span>
+            <span>Jugador</span>
+            <span>Partida</span>
+          </div>
+          <div id="results-body" class="results-table__body">
+            <p class="empty-state">Aun no hay intentos. El primero siempre da pistas.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
