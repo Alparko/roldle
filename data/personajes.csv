@@ -33,7 +33,7 @@ id,nombre,raza,clase,sexo,jugador,partida
 32,Marvin Limpio,Mediano,Picaro,Sergio,Waterdeep
 33,Wer Majakar,Draconido,Paladin,Hombre,Sergio,Las llaves de la Bóveda dorada
 34,Amaro,Semielfo,Hechicero,Hombre,Sergio,Dragonlance
-35,Benjamin,Duergar,Barbaro,Cazador de Brujas,Hombre,Sergio,Strahd
+35,Benjamin,Duergar,Barbaro,Cazador de Brujas,Hombre,Sergio,La maldición de Strahd
 36,Manuel Gois,Humano,Bardo,Hombre,Sergio,Icepeak
 37,Ferreras,Gnomo,hechicero,Hombre,Sergio,-
 38,Tonatiukan,Humano,Monje,Hombre,Sergio,El Cantar de Costhya'zor
@@ -43,19 +43,19 @@ id,nombre,raza,clase,sexo,jugador,partida
 42,Reno Jackson,Humano,Explorador,Hombre,Sergio,Sabia
 43,Altozano,Humano,Bardo,Hombre,Sergio,Sabia
 44,Orco,Semiorco,Barbaro,Hombre,Sergio,Sabia
-45,Cristobal Planar,Semiorco,Explorador,Hombre,Alparko,Sabia
+45,Cristobal Planar,Semiorco,Explorador,Hombre,Alparko,Historias de Sabia
 46,Devänoss,Vípero,Hechicero,Hombre,Fernando,Rol de Locos
-Camarón de la Isla,Humano,Bardo,Hombre,Fernando,El mejor rol de Pacheco
-Ander Margaster,Humano,Hechicero,Hombre,Fernando,Waterdeep
-Finneas Amaro,Semielfo,Pícaro,Hombre,Fernando,La tumba de la aniquilación
-Elfego Blackwood IV,Gnomo,Mago / Clérigo,Hombre,Fernando,Historias de Sabia
-Fei Li-Yun,Renacido,Paladín,Hombre,Fernando,Sabia 2
-Vegadhan Ovethupine,Goliat,Bárbaro,Hombre,Fernando,Historias de Sabia
-Iraya Margaster,Humano,Guerrero,Mujer,Fernando,Waterdeep 2
-Nob Viherno,Goblin,Hechicero,Hombre,Fernando,Icepeak
-Uziel Artaud,Elfo,Monje,Hombre,Fernando,La maldición de Strahd
-C.A.I.N,Autognomo,Explorador,Constructo,Fernando,Las Llaves de la Bóveda Dorada
-Cartman,Enano,Hechicero,Hombre,Fernando,KKK
-Otto de Caerbannog,Harengon,Clérigo,Hombre,Fernando,KKK Ahora me toca a mi
-Vera Margaster,Tiefling,Pícaro / Brujo,Mujer,Fernando,Waterdeep 3D
-Salvador "el Español",Humano,Guerrero,Hombre,Fernando,Waterdeep 2: Rol de JL
+47,Camarón de la Isla,Humano,Bardo,Hombre,Fernando,El mejor rol de Pacheco
+48,Ander Margaster,Humano,Hechicero,Hombre,Fernando,Waterdeep
+49,Finneas Amaro,Semielfo,Pícaro,Hombre,Fernando,La tumba de la aniquilación
+50,Elfego Blackwood IV,Gnomo,Mago / Clérigo,Hombre,Fernando,Historias de Sabia
+51,Fei Li-Yun,Renacido,Paladín,Hombre,Fernando,Sabia 2
+52,Vegadhan Ovethupine,Goliat,Bárbaro,Hombre,Fernando,Historias de Sabia
+53,Iraya Margaster,Humano,Guerrero,Mujer,Fernando,Waterdeep 2
+54,Nob Viherno,Goblin,Hechicero,Hombre,Fernando,Icepeak
+55,Uziel Artaud,Elfo,Monje,Hombre,Fernando,La maldición de Strahd
+56,C.A.I.N,Autognomo,Explorador,Constructo,Fernando,Las Llaves de la Bóveda Dorada
+57,Cartman,Enano,Hechicero,Hombre,Fernando,KKK
+58,Otto de Caerbannog,Harengon,Clérigo,Hombre,Fernando,KKK Ahora me toca a mi
+59,Vera Margaster,Tiefling,Pícaro / Brujo,Mujer,Fernando,Waterdeep 3D
+60,Salvador "el Español",Humano,Guerrero,Hombre,Fernando,Waterdeep 2: Rol de JL
