@@ -3,6 +3,7 @@ const GROUPS_PATH = "./data/agrupaciones.json";
 const STORAGE_KEY = "roldle-state-v1";
 const CHALLENGE_TIMEZONE = "Europe/Madrid";
 const BASE_CHALLENGE_DATE = "2026-01-01";
+const CELEBRATION_PARTICLE_COUNT = 24;
 
 const state = {
   characters: [],
@@ -115,6 +116,7 @@ function handleGuess(event) {
     return;
   }
 
+  const wasSolved = state.solved;
   state.guesses.unshift(buildGuess(character, state.target));
   state.solved = character.id === state.target.id;
   persistState();
@@ -122,6 +124,11 @@ function handleGuess(event) {
   renderAttemptCounter();
   renderResults();
   renderStatus();
+
+  if (!wasSolved && state.solved) {
+    triggerCelebration();
+  }
+
   setHelper(state.solved
     ? `Has acertado: ${character.name}. El siguiente reto aparecera a las 00:00 de Madrid.`
     : `Intento registrado para ${character.name}. Sigue buscando.`);
@@ -583,4 +590,50 @@ function exposeAdminTools() {
       return getCurrentChallengeKey(state.dayOffset);
     },
   };
+}
+
+function triggerCelebration() {
+  const existingLayer = document.querySelector(".celebration-layer");
+  if (existingLayer) {
+    existingLayer.remove();
+  }
+
+  const layer = document.createElement("div");
+  layer.className = "celebration-layer";
+  layer.setAttribute("aria-hidden", "true");
+
+  for (let index = 0; index < CELEBRATION_PARTICLE_COUNT; index += 1) {
+    const particle = document.createElement("span");
+    particle.className = "celebration-particle";
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 0.18}s`;
+    particle.style.animationDuration = `${1.9 + Math.random() * 1.3}s`;
+    particle.style.setProperty("--drift", `${-90 + Math.random() * 180}px`);
+    particle.style.setProperty("--rotation", `${120 + Math.random() * 300}deg`);
+    particle.style.setProperty("--particle-color", getCelebrationColor(index));
+    layer.appendChild(particle);
+  }
+
+  const burst = document.createElement("div");
+  burst.className = "celebration-burst";
+  layer.appendChild(burst);
+
+  document.body.appendChild(layer);
+  window.setTimeout(() => {
+    layer.classList.add("celebration-layer--fade");
+  }, 1400);
+  window.setTimeout(() => {
+    layer.remove();
+  }, 2800);
+}
+
+function getCelebrationColor(index) {
+  const colors = [
+    "#d9b35f",
+    "#f3e2a1",
+    "#b43c2f",
+    "#6f8a52",
+  ];
+
+  return colors[index % colors.length];
 }
