@@ -232,6 +232,10 @@ function renderAttemptCounter() {
 }
 
 function renderStatus() {
+  if (!refs.statusCard || !refs.statusTitle || !refs.statusCopy) {
+    return;
+  }
+
   if (state.solved) {
     setStatus(
       "status-card--win",
@@ -258,6 +262,10 @@ function renderStatus() {
 }
 
 function setStatus(cardClass, title, copy) {
+  if (!refs.statusCard || !refs.statusTitle || !refs.statusCopy) {
+    return;
+  }
+
   refs.statusCard.className = `status-card ${cardClass}`;
   refs.statusTitle.textContent = title;
   refs.statusCopy.textContent = copy;
