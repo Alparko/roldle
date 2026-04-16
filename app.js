@@ -59,7 +59,7 @@ bootstrap().catch((error) => {
 
 async function bootstrap() {
   const [csvText, similarityGroups] = await Promise.all([
-    fetch(CSV_PATH).then((response) => {
+    fetch(cacheBustedPath(CSV_PATH), { cache: "no-store" }).then((response) => {
       if (!response.ok) {
         throw new Error(`No se pudo cargar ${CSV_PATH}`);
       }
@@ -418,7 +418,7 @@ function normalized(value) {
 
 async function loadSimilarityGroups() {
   try {
-    const response = await fetch(GROUPS_PATH);
+    const response = await fetch(cacheBustedPath(GROUPS_PATH), { cache: "no-store" });
 
     if (!response.ok) {
       return {};
@@ -543,6 +543,10 @@ function getTimeZoneDateParts(date, timeZone) {
     month: parts.month,
     day: parts.day,
   };
+}
+
+function cacheBustedPath(path) {
+  return `${path}?v=${Date.now()}`;
 }
 
 function getDayDifference(baseKey, targetKey) {

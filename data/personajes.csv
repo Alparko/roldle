@@ -30,10 +30,10 @@ id,nombre,raza,clase,sexo,jugador,partida
 29,⁠Colombo,Enano,Picaro,Hombre,Javi,Las Llaves de la Bobeda Dorada
 30,⁠Richar Avere,Semielfo,Guerrero,Hombre,Javi,Dragonlance
 31,⁠Naggirlum Brewfall,Enano,Artifice,Hombre,Javi,Waterdeep 3D
-32,Marvin Limpio,Mediano,Picaro,Sergio,Waterdeep
+32,Marvin Limpio,Mediano,Picaro,Hombre,Sergio,Waterdeep
 33,Wer Majakar,Draconido,Paladin,Hombre,Sergio,Las llaves de la Bóveda dorada
 34,Amaro,Semielfo,Hechicero,Hombre,Sergio,Dragonlance
-35,Benjamin,Duergar,Barbaro,Cazador de Brujas,Hombre,Sergio,La maldición de Strahd
+35,Benjamin,Duergar,Barbaro / Cazador de Brujas,Hombre,Sergio,La maldición de Strahd
 36,Manuel Gois,Humano,Bardo,Hombre,Sergio,Icepeak
 37,Ferreras,Gnomo,hechicero,Hombre,Sergio,-
 38,Tonatiukan,Humano,Monje,Hombre,Sergio,El Cantar de Costhya'zor
