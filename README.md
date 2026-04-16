@@ -43,11 +43,26 @@ http://localhost:8000
 
 ## Como funciona
 
-- El personaje objetivo se elige de forma determinista segun la fecha actual.
-- El boton `Pasar al siguiente` incrementa manualmente el reto para pruebas o para avanzar cuando quieras.
+- El personaje objetivo se elige de forma determinista segun la fecha de `Europe/Madrid`, asi que cambia a las `00:00` de Madrid para todo el mundo.
 - El estado de la partida se guarda en `localStorage`.
 - La base de datos de demo esta en [data/personajes.csv](./data/personajes.csv).
 - Las similitudes configurables se definen en [data/agrupaciones.json](./data/agrupaciones.json).
+
+## Control local del reto
+
+El boton visible para `Pasar al siguiente` se ha quitado de la interfaz, pero la logica sigue en el codigo por si quieres reactivarla.
+
+Desde tu navegador puedes controlarlo localmente abriendo la consola y usando:
+
+```js
+window.roldleAdmin.getCurrentTarget()
+window.roldleAdmin.advanceDay()
+window.roldleAdmin.advanceDay(3)
+window.roldleAdmin.clearOverride()
+window.roldleAdmin.getChallengeDate()
+```
+
+Eso solo afecta al navegador de tu ordenador, no al reto publico que ven los demas.
 
 ## Formato del CSV
 

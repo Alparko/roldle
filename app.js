@@ -1,6 +1,8 @@
 const CSV_PATH = "./data/personajes.csv";
 const GROUPS_PATH = "./data/agrupaciones.json";
 const STORAGE_KEY = "roldle-state-v1";
+const CHALLENGE_TIMEZONE = "Europe/Madrid";
+const BASE_CHALLENGE_DATE = "2026-01-01";
 
 const state = {
   characters: [],
@@ -80,12 +82,15 @@ async function bootstrap() {
   renderResults();
   renderStatus();
   wireEvents();
+  exposeAdminTools();
   setHelper("Busca un personaje de la lista y compara sus pistas con el objetivo oculto.");
 }
 
 function wireEvents() {
   refs.form.addEventListener("submit", handleGuess);
-  refs.nextDayButton.addEventListener("click", handleAdvanceDay);
+  if (refs.nextDayButton) {
+    refs.nextDayButton.addEventListener("click", handleAdvanceDay);
+  }
   refs.resetButton.addEventListener("click", handleResetRound);
 }
 
@@ -93,7 +98,7 @@ function handleGuess(event) {
   event.preventDefault();
 
   if (state.solved) {
-    setHelper("Ya acertaste este reto. Pulsa \"Pasar al siguiente\" o reinicia la partida.");
+    setHelper("Ya acertaste este reto. Vuelve manana para el siguiente o reinicia la partida.");
     return;
   }
 
@@ -118,20 +123,13 @@ function handleGuess(event) {
   renderResults();
   renderStatus();
   setHelper(state.solved
-    ? `Has acertado: ${character.name}. Puedes pasar al siguiente reto cuando quieras.`
+    ? `Has acertado: ${character.name}. El siguiente reto aparecera a las 00:00 de Madrid.`
     : `Intento registrado para ${character.name}. Sigue buscando.`);
 }
 
 function handleAdvanceDay() {
   state.dayOffset += 1;
-  state.guesses = [];
-  state.solved = false;
-  selectDailyTarget();
-  persistState();
-  renderChallengeDate();
-  renderAttemptCounter();
-  renderResults();
-  renderStatus();
+  syncChallengeState();
   setHelper("Se ha cargado un nuevo personaje objetivo.");
 }
 
@@ -152,12 +150,8 @@ function selectDailyTarget() {
 }
 
 function getDailyIndex(totalCharacters, manualOffset) {
-  const baseDate = new Date("2026-01-01T00:00:00");
-  const today = new Date();
-  const todayKey = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const diffMs = todayKey.getTime() - baseDate.getTime();
-  const diffDays = Math.floor(diffMs / 86400000);
-  const positiveIndex = ((diffDays + manualOffset) % totalCharacters + totalCharacters) % totalCharacters;
+  const diffDays = getDayDifference(BASE_CHALLENGE_DATE, getCurrentChallengeKey(manualOffset));
+  const positiveIndex = ((diffDays % totalCharacters) + totalCharacters) % totalCharacters;
   return positiveIndex;
 }
 
@@ -230,14 +224,7 @@ function renderSuggestions() {
 }
 
 function renderChallengeDate() {
-  const today = new Date();
-  const visualDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  visualDate.setDate(visualDate.getDate() + state.dayOffset);
-  refs.challengeDate.textContent = visualDate.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  refs.challengeDate.textContent = formatChallengeDate(getCurrentChallengeKey(state.dayOffset));
 }
 
 function renderAttemptCounter() {
@@ -471,11 +458,11 @@ function hydrateState() {
       state.dayOffset = saved.dayOffset;
     }
 
-    if (Array.isArray(saved.guesses)) {
+    if (saved.challengeKey === getCurrentChallengeKey(state.dayOffset) && Array.isArray(saved.guesses)) {
       state.guesses = saved.guesses;
     }
 
-    if (typeof saved.solved === "boolean") {
+    if (saved.challengeKey === getCurrentChallengeKey(state.dayOffset) && typeof saved.solved === "boolean") {
       state.solved = saved.solved;
     }
   } catch (error) {
@@ -488,8 +475,104 @@ function persistState() {
     STORAGE_KEY,
     JSON.stringify({
       dayOffset: state.dayOffset,
+      challengeKey: getCurrentChallengeKey(state.dayOffset),
       guesses: state.guesses,
       solved: state.solved,
     })
   );
+}
+
+function syncChallengeState() {
+  state.guesses = [];
+  state.solved = false;
+  selectDailyTarget();
+  persistState();
+  renderChallengeDate();
+  renderAttemptCounter();
+  renderResults();
+  renderStatus();
+}
+
+function getCurrentChallengeKey(offsetDays = 0) {
+  const madridParts = getTimeZoneDateParts(new Date(), CHALLENGE_TIMEZONE);
+  const shiftedDate = new Date(Date.UTC(
+    madridParts.year,
+    madridParts.month - 1,
+    madridParts.day + offsetDays
+  ));
+
+  return [
+    shiftedDate.getUTCFullYear(),
+    String(shiftedDate.getUTCMonth() + 1).padStart(2, "0"),
+    String(shiftedDate.getUTCDate()).padStart(2, "0"),
+  ].join("-");
+}
+
+function getTimeZoneDateParts(date, timeZone) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const parts = Object.fromEntries(
+    formatter
+      .formatToParts(date)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, Number(part.value)])
+  );
+
+  return {
+    year: parts.year,
+    month: parts.month,
+    day: parts.day,
+  };
+}
+
+function getDayDifference(baseKey, targetKey) {
+  return Math.floor((dateKeyToUtc(targetKey) - dateKeyToUtc(baseKey)) / 86400000);
+}
+
+function dateKeyToUtc(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return Date.UTC(year, month - 1, day);
+}
+
+function formatChallengeDate(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return new Intl.DateTimeFormat("es-ES", {
+    timeZone: "UTC",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(Date.UTC(year, month - 1, day)));
+}
+
+function exposeAdminTools() {
+  window.roldleAdmin = {
+    getCurrentTarget() {
+      return {
+        challengeDate: getCurrentChallengeKey(state.dayOffset),
+        localOverrideDays: state.dayOffset,
+        target: state.target ? { ...state.target } : null,
+      };
+    },
+    advanceDay(days = 1) {
+      const parsedDays = Number(days);
+      state.dayOffset += Number.isFinite(parsedDays) ? parsedDays : 1;
+      syncChallengeState();
+      setHelper("Has adelantado tu reto localmente desde la consola.");
+      return this.getCurrentTarget();
+    },
+    clearOverride() {
+      state.dayOffset = 0;
+      syncChallengeState();
+      setHelper("Has vuelto al reto diario real.");
+      return this.getCurrentTarget();
+    },
+    getChallengeDate() {
+      return getCurrentChallengeKey(state.dayOffset);
+    },
+  };
 }
