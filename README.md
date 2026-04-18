@@ -43,7 +43,7 @@ http://localhost:8000
 
 ## Como funciona
 
-- El personaje objetivo se elige de forma determinista segun la fecha de `Europe/Madrid`, asi que cambia a las `00:00` de Madrid para todo el mundo.
+- El personaje objetivo se elige con una rotacion aleatoria determinista segun la fecha de `Europe/Madrid`, asi que cambia a las `00:00` de Madrid para todo el mundo y no sigue el orden del CSV.
 - El estado de la partida se guarda en `localStorage`.
 - La base de datos de demo esta en [data/personajes.csv](./data/personajes.csv).
 - Las similitudes configurables se definen en [data/agrupaciones.json](./data/agrupaciones.json).

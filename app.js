@@ -151,15 +151,19 @@ function handleResetRound() {
 }
 
 function selectDailyTarget() {
-  const index = getDailyIndex(state.characters.length, state.dayOffset);
+  const index = getDailyIndex(state.characters, state.dayOffset);
   state.targetIndex = index;
   state.target = state.characters[index];
 }
 
-function getDailyIndex(totalCharacters, manualOffset) {
+function getDailyIndex(characters, manualOffset) {
+  const totalCharacters = characters.length;
   const diffDays = getDayDifference(BASE_CHALLENGE_DATE, getCurrentChallengeKey(manualOffset));
-  const positiveIndex = ((diffDays % totalCharacters) + totalCharacters) % totalCharacters;
-  return positiveIndex;
+  const cycle = Math.floor(diffDays / totalCharacters);
+  const positionInCycle = positiveModulo(diffDays, totalCharacters);
+  const shuffledIndexes = getDeterministicShuffledIndexes(characters, cycle);
+
+  return shuffledIndexes[positionInCycle];
 }
 
 function parseCsv(text) {
@@ -556,6 +560,50 @@ function getDayDifference(baseKey, targetKey) {
 function dateKeyToUtc(dateKey) {
   const [year, month, day] = dateKey.split("-").map(Number);
   return Date.UTC(year, month - 1, day);
+}
+
+function positiveModulo(value, divisor) {
+  return ((value % divisor) + divisor) % divisor;
+}
+
+function getDeterministicShuffledIndexes(characters, cycle) {
+  const indexes = characters.map((_, index) => index);
+  const seedText = [
+    BASE_CHALLENGE_DATE,
+    cycle,
+    characters.map((character) => character.id).join("|"),
+  ].join(":");
+  const random = createSeededRandom(hashString(seedText));
+
+  for (let index = indexes.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [indexes[index], indexes[swapIndex]] = [indexes[swapIndex], indexes[index]];
+  }
+
+  return indexes;
+}
+
+function hashString(value) {
+  let hash = 2166136261;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+}
+
+function createSeededRandom(seed) {
+  let currentSeed = seed;
+
+  return function nextRandom() {
+    currentSeed += 0x6D2B79F5;
+    let value = currentSeed;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 function formatChallengeDate(dateKey) {

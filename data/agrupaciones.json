@@ -1,8 +1,18 @@
 {
   "partida": [
-    ["Waterdeep", "Waterdeep 2"]
+    ["Waterdeep", "Waterdeep 2", "Waterdeep 2: Rol de JL", "Waterdeep 3D"],
+    ["Sabia", "Sabia 2", "Historias de Sabia"],
+    ["Retratos de Desolación", "Retratos de Desolación 2", "Retratos de Desolación 3"]
   ],
-  "raza": [],
+  "raza": [
+    ["Elfo", "Semielfo", "Drow", "Eladrin"],
+    ["Gnomo", "Autognomo"],
+    ["Duergar","Enano"],
+    ["Humano", "Semielfo"],
+    ["Humano", "Semioroco"],
+    ["Orco", "Semiorco"]
+
+  ],
   "clase": [],
   "sexo": [],
   "jugador": []
